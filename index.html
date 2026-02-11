@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数字当てゲーム（ヌメロン）- 無料で遊べる脳トレパズル</title>
+  <meta name="description" content="3桁の数字を当てる脳トレゲーム！ヒントを頼りに隠された数字を推理しよう。2〜5桁の難易度選択可能。子供から大人まで楽しめる無料ゲーム。">
+  <meta name="keywords" content="ヌメロン,数字当てゲーム,脳トレ,パズル,無料ゲーム,Hit&Blow,推理ゲーム">
+  <meta name="author" content="Your Name">
+  
+  <!-- OGP (SNSシェア用) -->
+  <meta property="og:title" content="数字当てゲーム（ヌメロン）">
+  <meta property="og:description" content="3桁の数字を当てる脳トレゲーム！ヒントを頼りに隠された数字を推理しよう。子供から大人まで楽しめます。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://example.com/ogp.png">
+  <meta property="og:url" content="https://example.com/">
+  <meta property="og:locale" content="ja_JP">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="数字当てゲーム（ヌメロン）">
+  <meta name="twitter:description" content="3桁の数字を当てる脳トレゲーム！子供から大人まで楽しめます。">
+  <meta name="twitter:image" content="https://example.com/ogp.png">
+  
+  <!-- Favicon (絵文字をSVGで使用) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔢</text></svg>">
+  
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔢</text></svg>">
+  
+  <!-- テーマカラー -->
+  <meta name="theme-color" content="#ffe066">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Zen Maru Gothic', 'Nunito', sans-serif;
+      min-height: 100vh;
+      color: #4a3728;
+      padding: 20px;
+      background: #ffe066;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255,107,107,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(78,205,196,0.3) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(199,128,255,0.2) 0%, transparent 60%);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "🔢 ⭐ 🎯 ✨ 🎮 💫 🌟 🎪";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 100%;
+      font-size: 2rem;
+      opacity: 0.15;
+      letter-spacing: 40px;
+      line-height: 80px;
+      word-wrap: break-word;
+      pointer-events: none;
+      animation: floatBg 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes floatBg {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50%, 0); }
+    }
+
+    .container {
+      max-width: 440px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 
+        3px 3px 0 #ff6b6b,
+        6px 6px 0 #4ecdc4;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff6b6b, #feca57);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 30px;
+      box-shadow: 0 4px 0 #e05555;
+    }
+
+    /* 難易度選択 */
+    .difficulty-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .difficulty-btn {
+      padding: 10px 12px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      color: #fff;
+      flex: 1;
+      min-width: 70px;
+      max-width: 100px;
+    }
+
+    .difficulty-btn.easy {
+      background: linear-gradient(135deg, #55efc4, #00b894);
+      box-shadow: 0 4px 0 #009874;
+    }
+
+    .difficulty-btn.normal {
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+      box-shadow: 0 4px 0 #0970c4;
+    }
+
+    .difficulty-btn.hard {
+      background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+      box-shadow: 0 4px 0 #e0a800;
+      color: #5a4a00;
+    }
+
+    .difficulty-btn.oni {
+      background: linear-gradient(135deg, #ff7675, #d63031);
+      box-shadow: 0 4px 0 #b02525;
+    }
+
+    .difficulty-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .difficulty-btn:active {
+      transform: translateY(2px);
+    }
+
+    .difficulty-btn.active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 currentColor;
+    }
+
+    .difficulty-btn.active.easy { box-shadow: 0 1px 0 #009874; }
+    .difficulty-btn.active.normal { box-shadow: 0 1px 0 #0970c4; }
+    .difficulty-btn.active.hard { box-shadow: 0 1px 0 #e0a800; }
+    .difficulty-btn.active.oni { box-shadow: 0 1px 0 #b02525; }
+
+    .game-info {
+      background: #fff;
+      border-radius: 20px;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      text-align: center;
+      box-shadow: 
+        0 6px 0 #ddd,
+        0 8px 20px rgba(0,0,0,0.1);
+      border: 4px solid #4ecdc4;
+    }
+
+    .game-info p {
+      margin: 5px 0 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .turn-count {
+      font-size: 1.4rem;
+      color: #ff6b6b;
+      font-weight: 900;
+    }
+
+    .difficulty-label {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #fff;
+      margin-left: 8px;
+    }
+
+    .difficulty-label.easy { background: #00b894; }
+    .difficulty-label.normal { background: #0984e3; }
+    .difficulty-label.hard { background: #fdcb6e; color: #5a4a00; }
+    .difficulty-label.oni { background: #d63031; }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #fff;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+    }
+
+    .legend-icon.hit {
+      background: linear-gradient(135deg, #26de81, #20bf6b);
+    }
+
+    .legend-icon.blow {
+      background: linear-gradient(135deg, #fed330, #f7b731);
+    }
+
+    .digit-display {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .digit-box {
+      width: 55px;
+      height: 65px;
+      background: #fff;
+      border: 4px solid #ddd;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #aaa;
+      box-shadow: 
+        0 5px 0 #ccc,
+        inset 0 -3px 0 rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+
+    .digit-box.filled {
+      background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+      border-color: #5f50e0;
+      color: #fff;
+      box-shadow: 
+        0 5px 0 #4a3fc4,
+        inset 0 -3px 0 rgba(0,0,0,0.1);
+      transform: scale(1.05);
+    }
+
+    /* 5桁モード用に小さく */
+    .digits-5 .digit-box {
+      width: 48px;
+      height: 58px;
+      font-size: 1.7rem;
+    }
+
+    .numpad {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .numpad button {
+      padding: 14px 8px;
+      font-size: 1.4rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 0 #0970c4;
+      font-family: 'Nunito', 'Zen Maru Gothic', sans-serif;
+    }
+
+    .numpad button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #0970c4;
+    }
+
+    .numpad button:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0970c4;
+    }
+
+    .numpad button:disabled {
+      background: #ddd;
+      color: #aaa;
+      box-shadow: 0 4px 0 #bbb;
+      cursor: not-allowed;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .actions button {
+      flex: 1;
+      padding: 14px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: 'Zen Maru Gothic', sans-serif;
+    }
+
+    .btn-delete {
+      background: linear-gradient(135deg, #ff7675, #d63031);
+      color: #fff;
+      box-shadow: 0 4px 0 #b02525;
+    }
+
+    .btn-delete:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #b02525;
+    }
+
+    .btn-delete:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #b02525;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #55efc4, #00b894);
+      color: #fff;
+      box-shadow: 0 4px 0 #009874;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #009874;
+    }
+
+    .btn-submit:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #009874;
+    }
+
+    .btn-submit:disabled {
+      background: #bbb;
+      box-shadow: 0 4px 0 #999;
+      cursor: not-allowed;
+    }
+
+    .history {
+      background: #fff;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 
+        0 6px 0 #ddd,
+        0 8px 20px rgba(0,0,0,0.1);
+      border: 4px solid #fdcb6e;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .history h3 {
+      margin-bottom: 12px;
+      color: #6c5ce7;
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .history-placeholder {
+      color: #bbb;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      border-left: 4px solid #6c5ce7;
+    }
+
+    .history-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .guess-number {
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      color: #2d3436;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .result {
+      display: flex;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .hit {
+      color: #00b894;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .blow {
+      color: #f7b731;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 35px 30px;
+      border-radius: 25px;
+      text-align: center;
+      max-width: 350px;
+      margin: 20px;
+      box-shadow: 
+        0 10px 0 #ddd,
+        0 15px 40px rgba(0,0,0,0.3);
+      border: 5px solid #feca57;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-content h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #6c5ce7;
+    }
+
+    .modal-content .answer {
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #4ecdc4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 10px;
+      margin: 12px 0;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .modal-content p {
+      color: #636e72;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-retry {
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #5240c4;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .btn-retry:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #5240c4;
+    }
+
+    .btn-share {
+      padding: 12px 25px;
+      font-size: 1rem;
+      font-weight: 900;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #0970c4;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .btn-share:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #0970c4;
+    }
+
+    .rules {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 
+        0 6px 0 #ddd,
+        0 8px 20px rgba(0,0,0,0.1);
+      border: 4px solid #ff6b6b;
+    }
+
+    .rules h3 {
+      color: #ff6b6b;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .rules p {
+      font-size: 0.85rem;
+      color: #636e72;
+      line-height: 1.8;
+      font-weight: 500;
+    }
+
+    .rules .example {
+      background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: #6c5ce7;
+      font-weight: 700;
+    }
+
+    .hint-label {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .hint-label.hit {
+      background: linear-gradient(135deg, #26de81, #20bf6b);
+    }
+
+    .hint-label.blow {
+      background: linear-gradient(135deg, #fed330, #f7b731);
+    }
+
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      animation: sparkle 0.6s ease forwards;
+    }
+
+    @keyframes sparkle {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      100% { transform: scale(1) rotate(180deg); opacity: 0; }
+    }
+
+    /* フッター */
+    .footer {
+      margin-top: 30px;
+      padding: 20px;
+      text-align: center;
+      color: #886622;
+      font-size: 0.8rem;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+
+    .footer-links a {
+      color: #886622;
+      text-decoration: none;
+      border-bottom: 1px dotted #886622;
+    }
+
+    .footer-links a:hover {
+      color: #553311;
+    }
+
+    /* プライバシーポリシーモーダル */
+    .privacy-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .privacy-modal.show {
+      display: flex;
+    }
+
+    .privacy-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      margin: 20px;
+      color: #333;
+    }
+
+    .privacy-content h2 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+      color: #6c5ce7;
+    }
+
+    .privacy-content p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .privacy-content .btn-close {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+      color: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔢 数字当てゲーム</h1>
+      <p class="subtitle">⭐ ヌメロン ⭐</p>
+    </header>
+
+    <!-- 難易度選択 -->
+    <div class="difficulty-selector">
+      <button class="difficulty-btn easy" data-digits="2">😊 2ケタ<br>かんたん</button>
+      <button class="difficulty-btn normal active" data-digits="3">😃 3ケタ<br>ふつう</button>
+      <button class="difficulty-btn hard" data-digits="4">😤 4ケタ<br>むずかしい</button>
+      <button class="difficulty-btn oni" data-digits="5">👹 5ケタ<br>おに</button>
+    </div>
+
+    <div class="game-info">
+      <p>🎯 チャレンジ <span class="turn-count" id="turnCount">1</span> 回目
+        <span class="difficulty-label normal" id="difficultyLabel">ふつう</span>
+      </p>
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-icon hit">◎</span>
+          <span>ピッタリ！</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-icon blow">○</span>
+          <span>おしい！</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="digit-display" id="digitDisplay">
+      <div class="digit-box">?</div>
+      <div class="digit-box">?</div>
+      <div class="digit-box">?</div>
+    </div>
+
+    <div class="numpad" id="numpad">
+      <button data-num="0">0</button>
+      <button data-num="1">1</button>
+      <button data-num="2">2</button>
+      <button data-num="3">3</button>
+      <button data-num="4">4</button>
+      <button data-num="5">5</button>
+      <button data-num="6">6</button>
+      <button data-num="7">7</button>
+      <button data-num="8">8</button>
+      <button data-num="9">9</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn-delete" id="deleteBtn">🔙 けす</button>
+      <button class="btn-submit" id="submitBtn" disabled>✅ こたえる</button>
+    </div>
+
+    <div class="history" id="historySection">
+      <h3>📝 これまでのチャレンジ</h3>
+      <div id="historyList">
+        <p class="history-placeholder">まだチャレンジしていないよ！</p>
+      </div>
+    </div>
+
+    <div class="rules">
+      <h3>📖 あそびかた</h3>
+      <p>
+        かくれている数字を当てよう！<br>
+        0〜9の数字をつかうよ。おなじ数字は出ないよ。
+      </p>
+      <div class="example">
+        <span class="hint-label hit">◎ ピッタリ</span> 数字もばしょも正かい！<br>
+        <span class="hint-label blow">○ おしい</span> 数字はあるけど、ばしょがちがう
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="footer">
+      <p>© 2025 数字当てゲーム（ヌメロン）</p>
+      <p class="footer-links">
+        <a href="#" onclick="showPrivacy(); return false;">プライバシーポリシー</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- 結果モーダル -->
+  <div class="modal" id="resultModal">
+    <div class="modal-content">
+      <h2 id="resultTitle">🎉 せいかい！</h2>
+      <div class="answer" id="resultAnswer"></div>
+      <p id="resultMessage"></p>
+      <div class="modal-buttons">
+        <button class="btn-share" id="shareBtn">📤 シェア</button>
+        <button class="btn-retry" id="retryBtn">🔄 もういちど</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- プライバシーポリシーモーダル -->
+  <div class="privacy-modal" id="privacyModal">
+    <div class="privacy-content">
+      <h2>📄 プライバシーポリシー</h2>
+      <p><strong>個人情報の収集について</strong><br>
+      当サイトでは、ユーザーの個人情報を収集することはありません。ゲームのプレイデータはお使いのブラウザ内にのみ保存され、外部に送信されることはありません。</p>
+      <p><strong>アクセス解析について</strong><br>
+      当サイトでは、サービス向上のためアクセス解析ツールを使用する場合があります。これらのツールはCookieを使用してデータを収集しますが、個人を特定する情報は含まれません。</p>
+      <p><strong>広告について</strong><br>
+      当サイトでは、第三者配信の広告サービスを利用する場合があります。広告配信事業者は、ユーザーの興味に応じた広告を表示するためにCookieを使用することがあります。</p>
+      <p><strong>お問い合わせ</strong><br>
+      ご質問等がございましたら、サイト運営者までご連絡ください。</p>
+      <button class="btn-close" onclick="closePrivacy()">とじる</button>
+    </div>
+  </div>
+
+  <script>
+    // 難易度設定
+    const DIFFICULTY = {
+      2: { name: 'かんたん', class: 'easy', emoji: '😊' },
+      3: { name: 'ふつう', class: 'normal', emoji: '😃' },
+      4: { name: 'むずかしい', class: 'hard', emoji: '😤' },
+      5: { name: 'おに', class: 'oni', emoji: '👹' }
+    };
+
+    // ゲーム状態
+    let digitCount = 3;
+    let answer = [];
+    let currentInput = [];
+    let history = [];
+    let turn = 1;
+    let gameOver = false;
+
+    // DOM要素
+    const digitDisplay = document.getElementById('digitDisplay');
+    const numpad = document.getElementById('numpad');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const historyList = document.getElementById('historyList');
+    const turnCount = document.getElementById('turnCount');
+    const difficultyLabel = document.getElementById('difficultyLabel');
+    const resultModal = document.getElementById('resultModal');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultAnswer = document.getElementById('resultAnswer');
+    const resultMessage = document.getElementById('resultMessage');
+    const retryBtn = document.getElementById('retryBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+
+    // キラキラエフェクト
+    function createSparkle(x, y) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = x + 'px';
+      sparkle.style.top = y + 'px';
+      sparkle.textContent = ['✨', '⭐', '🌟', '💫'][Math.floor(Math.random() * 4)];
+      sparkle.style.fontSize = (20 + Math.random() * 20) + 'px';
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 600);
+    }
+
+    // 桁数表示を更新
+    function updateDigitDisplay() {
+      digitDisplay.innerHTML = '';
+      digitDisplay.className = 'digit-display' + (digitCount === 5 ? ' digits-5' : '');
+      
+      for (let i = 0; i < digitCount; i++) {
+        const box = document.createElement('div');
+        box.className = 'digit-box';
+        box.id = `digit${i}`;
+        box.textContent = '?';
+        digitDisplay.appendChild(box);
+      }
+    }
+
+    // 難易度ラベル更新
+    function updateDifficultyLabel() {
+      const diff = DIFFICULTY[digitCount];
+      difficultyLabel.textContent = diff.name;
+      difficultyLabel.className = 'difficulty-label ' + diff.class;
+    }
+
+    // ゲーム初期化
+    function initGame() {
+      const nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+      answer = [];
+      for (let i = 0; i < digitCount; i++) {
+        const idx = Math.floor(Math.random() * nums.length);
+        answer.push(nums[idx]);
+        nums.splice(idx, 1);
+      }
+      
+      currentInput = [];
+      history = [];
+      turn = 1;
+      gameOver = false;
+      
+      updateDigitDisplay();
+      updateDifficultyLabel();
+      updateDisplay();
+      updateNumpad();
+      historyList.innerHTML = '<p class="history-placeholder">まだチャレンジしていないよ！</p>';
+      turnCount.textContent = turn;
+      resultModal.classList.remove('show');
+    }
+
+    // 表示更新
+    function updateDisplay() {
+      for (let i = 0; i < digitCount; i++) {
+        const box = document.getElementById(`digit${i}`);
+        if (currentInput[i] !== undefined) {
+          box.textContent = currentInput[i];
+          box.classList.add('filled');
+        } else {
+          box.textContent = '?';
+          box.classList.remove('filled');
+        }
+      }
+      submitBtn.disabled = currentInput.length !== digitCount;
+    }
+
+    // テンキー更新
+    function updateNumpad() {
+      const buttons = numpad.querySelectorAll('button');
+      buttons.forEach(btn => {
+        const num = parseInt(btn.dataset.num);
+        btn.disabled = currentInput.includes(num) || gameOver;
+      });
+    }
+
+    // 数字入力
+    function inputNumber(num) {
+      if (currentInput.length < digitCount && !currentInput.includes(num) && !gameOver) {
+        currentInput.push(num);
+        updateDisplay();
+        updateNumpad();
+      }
+    }
+
+    // 削除
+    function deleteNumber() {
+      if (currentInput.length > 0 && !gameOver) {
+        currentInput.pop();
+        updateDisplay();
+        updateNumpad();
+      }
+    }
+
+    // ピッタリとおしいを計算
+    function calculateResult(guess) {
+      let hit = 0;
+      let blow = 0;
+      
+      for (let i = 0; i < digitCount; i++) {
+        if (guess[i] === answer[i]) {
+          hit++;
+        } else if (answer.includes(guess[i])) {
+          blow++;
+        }
+      }
+      
+      return { hit, blow };
+    }
+
+    // 回答送信
+    function submitAnswer() {
+      if (currentInput.length !== digitCount || gameOver) return;
+      
+      const guess = [...currentInput];
+      const result = calculateResult(guess);
+      
+      history.push({ guess, result });
+      
+      if (history.length === 1) {
+        historyList.innerHTML = '';
+      }
+      
+      const historyItem = document.createElement('div');
+      historyItem.className = 'history-item';
+      historyItem.innerHTML = `
+        <span class="guess-number">${guess.join('')}</span>
+        <span class="result">
+          <span class="hit">◎ ${result.hit}</span>
+          <span class="blow">○ ${result.blow}</span>
+        </span>
+      `;
+      historyList.insertBefore(historyItem, historyList.firstChild);
+      
+      if (result.hit === digitCount) {
+        gameOver = true;
+        for (let i = 0; i < 15; i++) {
+          setTimeout(() => {
+            createSparkle(
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerHeight
+            );
+          }, i * 100);
+        }
+        setTimeout(() => showResult(true), 500);
+      } else {
+        turn++;
+        turnCount.textContent = turn;
+        currentInput = [];
+        updateDisplay();
+        updateNumpad();
+      }
+    }
+
+    // 結果表示
+    function showResult(isWin) {
+      const diff = DIFFICULTY[digitCount];
+      resultTitle.textContent = isWin ? '🎉 せいかい！🎉' : '😢 ざんねん...';
+      resultAnswer.textContent = answer.join('');
+      
+      let message = '';
+      if (isWin) {
+        // 難易度によってメッセージ調整
+        const thresholds = {
+          2: [2, 4, 6],
+          3: [3, 5, 8],
+          4: [4, 7, 10],
+          5: [5, 8, 12]
+        };
+        const [great, good, ok] = thresholds[digitCount];
+        
+        if (turn <= great) {
+          message = `${diff.emoji} ${diff.name}（${digitCount}ケタ）\n${turn}回でクリア！\nすごい！天才！🌟`;
+        } else if (turn <= good) {
+          message = `${diff.emoji} ${diff.name}（${digitCount}ケタ）\n${turn}回でクリア！\nやったね！👏`;
+        } else if (turn <= ok) {
+          message = `${diff.emoji} ${diff.name}（${digitCount}ケタ）\n${turn}回でクリア！\nがんばったね！😊`;
+        } else {
+          message = `${diff.emoji} ${diff.name}（${digitCount}ケタ）\n${turn}回でクリア！\nあきらめずにえらい！💪`;
+        }
+      } else {
+        message = `こたえは ${answer.join('')} でした`;
+      }
+      
+      resultMessage.innerHTML = message.replace(/\n/g, '<br>');
+      resultModal.classList.add('show');
+    }
+
+    // シェア機能
+    function shareResult() {
+      const diff = DIFFICULTY[digitCount];
+      let shareText = `🔢 数字当てゲーム（ヌメロン）\n`;
+      shareText += `${diff.emoji} ${diff.name}（${digitCount}ケタ）\n`;
+      shareText += `✨ ${turn}回でクリア！ ✨\n\n`;
+      
+      history.forEach((h, i) => {
+        const hitEmoji = '◎'.repeat(h.result.hit);
+        const blowEmoji = '○'.repeat(h.result.blow);
+        const missEmoji = '×'.repeat(digitCount - h.result.hit - h.result.blow);
+        shareText += `${i + 1}. ${hitEmoji}${blowEmoji}${missEmoji}\n`;
+      });
+      
+      shareText += `\n#数字当てゲーム #ヌメロン`;
+      
+      if (navigator.share) {
+        navigator.share({ text: shareText });
+      } else {
+        navigator.clipboard.writeText(shareText).then(() => {
+          alert('けっかをコピーしたよ！✨');
+        });
+      }
+    }
+
+    // 難易度変更
+    function changeDifficulty(newDigitCount) {
+      digitCount = newDigitCount;
+      
+      // ボタンのアクティブ状態更新
+      difficultyBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.dataset.digits) === digitCount) {
+          btn.classList.add('active');
+        }
+      });
+      
+      initGame();
+    }
+
+    // イベントリスナー
+    difficultyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        changeDifficulty(parseInt(btn.dataset.digits));
+      });
+    });
+
+    numpad.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
+        inputNumber(parseInt(e.target.dataset.num));
+        const rect = e.target.getBoundingClientRect();
+        createSparkle(rect.left + rect.width/2, rect.top);
+      }
+    });
+
+    deleteBtn.addEventListener('click', deleteNumber);
+    submitBtn.addEventListener('click', submitAnswer);
+    retryBtn.addEventListener('click', initGame);
+    shareBtn.addEventListener('click', shareResult);
+
+    // キーボード入力対応
+    document.addEventListener('keydown', (e) => {
+      if (gameOver && e.key !== 'Enter') return;
+      
+      if (e.key >= '0' && e.key <= '9') {
+        const num = parseInt(e.key);
+        if (!currentInput.includes(num)) {
+          inputNumber(num);
+        }
+      } else if (e.key === 'Backspace') {
+        deleteNumber();
+      } else if (e.key === 'Enter') {
+        if (gameOver) {
+          initGame();
+        } else {
+          submitAnswer();
+        }
+      }
+    });
+
+    // プライバシーポリシー表示
+    function showPrivacy() {
+      document.getElementById('privacyModal').classList.add('show');
+    }
+
+    function closePrivacy() {
+      document.getElementById('privacyModal').classList.remove('show');
+    }
+
+    // プライバシーモーダル外クリックで閉じる
+    document.getElementById('privacyModal').addEventListener('click', (e) => {
+      if (e.target.id === 'privacyModal') {
+        closePrivacy();
+      }
+    });
+
+    // ゲーム開始
+    initGame();
+  </script>
+</body>
+</html>
